@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<h2>Members of Team: {{ team.name }}</h2>
+<p>description: {{ team.description }}</p>
+
+
+
+{% if members %}
+<table class="table table-striped mt-4">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Full Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for membership in members %}
+    <tr>
+      <td>{{ membership.user.username }}</td>
+      <td>{{ membership.user.full_name }}</td>
+      <td>{{ membership.user.email }}</td>
+      <td>{{ membership.user.phone }}</td>
+      <td>{{ membership.user.address }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="text-muted mt-4">No active members in this team.</p>
+{% endif %} {% endblock %}

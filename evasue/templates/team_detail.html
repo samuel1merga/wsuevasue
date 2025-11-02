@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Team Details{% endblock %}
+
+{% block content %}
+<h2>Team: {{ team.name }}</h2>
+<p>{{ team.description }}</p>
+
+{% if has_requested %}
+  <p>You have already sent a join request to this team. Please wait for approval.</p>
+{% else %}
+  <form method="post" onsubmit="return validateCheckbox()">
+    {% csrf_token %}
+    <div class="checkbox">
+      <input type="checkbox" id="Checkbox">
+      <span>ከ ህብረቱ ራእይ ጋር በመስማማት አብሬ እቀጥላለው!!</span>
+    </div>
+
+    <!-- Error message area -->
+    <div id="checkboxError" style="color: red; margin-top: 5px;"></div>
+
+    <br>
+    <button type="submit">Request to Join Team</button>
+  </form>
+
+  <script>
+    function validateCheckbox() {
+      const checkbox = document.getElementById('Checkbox');
+      const errorDiv = document.getElementById('checkboxError');
+      
+      if (!checkbox.checked) {
+        errorDiv.textContent = "እባክዎን መስማማትዎን ከላይ ያለውን በመንካት ያረጋግጡ።"; 
+        return false;
+      } else {
+        errorDiv.textContent = "";
+        return true;
+      }
+    }
+  </script>
+{% endif %}
+{% endblock %}

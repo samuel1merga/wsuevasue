@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+<h1></h1>
+{% block title %}Register Leader{% endblock %} {%block content %}
+<h2>Register Leader</h2>
+<form method="post">
+  {% csrf_token %}
+  <label>Username</label>
+  <input type="text" name="username" required />
+
+  <label>Password</label>
+  <input type="password" name="password" required />
+
+  <label>Assign to Team</label>
+  <select name="team" required>
+    <option value="">-- Select Team --</option>
+    {% for team in teams %}
+    <option value="{{ team.id }}">{{ team.name }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Register Leader</button>
+</form>
+{% endblock %}

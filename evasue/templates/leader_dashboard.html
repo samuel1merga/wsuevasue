@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block title %}Leader Dashboard{% endblock %}
+
+{% block content %}
+<style>
+  /* Table responsive */
+  @media(max-width: 340px){
+    table {
+      width: 100%;
+    }
+  }
+
+  /* Modal styles */
+  .modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; top: 0;
+    width: 100%; height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5);
+  }
+
+  .modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .modal img {
+    max-width: 120px;
+    max-height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .modal-body {
+    display: flex;
+    gap: 20px;
+  }
+</style>
+
+<h2>Leader Dashboard</h2>
+
+<h3>Your Teams</h3>
+<ul>
+  {% for team in teams %}
+    <li>{{ team.name }} ({{ team.member_count }} members)</li>
+  {% empty %}
+    <li>No teams assigned.</li>
+  {% endfor %}
+</ul>
+
+<h3>Join Requests</h3>
+{% if join_requests %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Member</th>
+      <th>Batch</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for req in join_requests %}
+    <tr>
+      <td>{{ req.user.username }} ({{ req.user.full_name }})</td>
+      <td>{{ req.user.batch }}</td>
+     
+      <td>
+        <!-- View Details Button -->
+        <button class="btn btn-info btn-sm" onclick="openModal({{ req.id }})">View Details</button>
+
+        <!-- Approve Form -->
+        <form method="post" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="approve_request_id" value="{{ req.id }}">
+          <button type="submit" class="btn btn-success btn-sm">Approve</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Modals -->
+{% for req in join_requests %}
+<div class="modal" id="modal-{{ req.id }}">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal({{ req.id }})">&times;</span>
+    <h5>{{ req.user.full_name }} ({{ req.user.username }})</h5>
+    <div class="modal-body">
+      <div>
+        {% if req.user.profile_image %}
+        <img src="{{ req.user.profile_image.url }}">
+        {% else %}
+        <img src="/static/default-avatar.png">
+        {% endif %}
+      </div>
+      <div>
+        <p><strong>Full Name:</strong> {{ req.user.full_name }}</p>
+        <p><strong>Username:</strong> {{ req.user.username }}</p>
+        <p><strong>Role:</strong> {{ req.user.get_role_display }}</p>
+        <p><strong>Batch:</strong> {{ req.user.batch }}</p>
+        <p><strong>Phone:</strong> {{ req.user.phone|default:"N/A" }}</p>
+        <p><strong>Address:</strong> {{ req.user.address|default:"N/A" }}</p>
+<p><strong>Teams Joined:</strong>
+{% if req.user_teams %}
+  {% for m in req.user_teams %}
+    {{ m.team.name }}{% if not forloop.last %}, {% endif %}
+  {% endfor %}
+{% else %}
+  None
+{% endif %}
+</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% else %}
+<p>No pending join requests.</p>
+{% endif %}
+
+<h3>Post a Message</h3>
+<form method="post">
+  {% csrf_token %}
+  <label for="message-content">Message</label>
+  <textarea id="message-content" name="content" required rows="4" style="width: 100%;"></textarea>
+  <button type="submit" class="btn btn-primary mt-2">Send Message</button>
+</form>
+
+<h3>Messages</h3>
+<ul>
+  {% for msg in messages_list %}
+    <li>
+      <strong>{{ msg.author.username }}</strong> on
+      <em>{{ msg.created_at|date:"Y-m-d H:i" }}</em><br />
+      {{ msg.content }}
+    </li>
+  {% empty %}
+    <li>No messages.</li>
+  {% endfor %}
+</ul>
+
+<!-- JS for modals -->
+<script>
+function openModal(id) {
+  document.getElementById('modal-' + id).style.display = 'block';
+}
+function closeModal(id) {
+  document.getElementById('modal-' + id).style.display = 'none';
+}
+// Click outside modal to close
+window.onclick = function(event) {
+  if (event.target.classList.contains('modal')) {
+    event.target.style.display = 'none';
+  }
+}
+</script>
+
+{% endblock %}

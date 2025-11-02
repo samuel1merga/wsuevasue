@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+<h1></h1>
+{% block title %}Member detail{% endblock %} {%block content %}
+<style>
+      
+  .container {
+ 
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    box-sizing: border-box;
+  }
+
+  .sidebar-list {
+    flex: 1 1 250px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    min-width: 220px;
+  }
+
+  .sidebar-list h4 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #2c3e50;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+  }
+
+  .sidebar-list ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .sidebar-list li {
+    margin: 8px 0;
+  }
+
+  .sidebar-list a {
+    color: #2980b9;
+    text-decoration: none;
+  }
+
+  .sidebar-list a:hover {
+    text-decoration: underline;
+  }
+
+  .cv-card {
+    flex: 2 1 600px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    min-width: 300px;
+  }
+
+  .cv-sidebar {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    flex: 1 1 100%;
+  }
+
+  .cv-sidebar img {
+    height: 200px;
+    width:200px;
+    border-radius: 20%;
+    object-fit: cover;
+    border: 4px solid #ecf0f1;
+    margin-bottom: 15px;
+  }
+
+  .cv-sidebar h2 {
+    margin: 10px 0 5px;
+    font-size: 22px;
+  }
+
+  .cv-sidebar p {
+    font-size: 14px;
+    color: #bdc3c7;
+    margin: 0;
+  }
+
+  .cv-main {
+    padding: 25px 30px;
+    flex: 1 1 100%;
+  }
+
+  .section {
+    margin-bottom: 25px;
+  }
+
+  .section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 5px;
+  }
+
+  .section p {
+    margin: 5px 0;
+    font-size: 15px;
+  }
+
+  .label {
+    display: inline-block;
+    font-weight: bold;
+    color: #555;
+  }
+
+  
+</style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar with team member links -->
+      <div class="sidebar-list">
+        <h4>Other Members ({{ team.name }})</h4>
+        <ul>
+          {% for m in other_members %}
+          <li>
+            <a href="{% url 'member_detail' m.user.id %}">
+              {{ m.user.username }}
+            </a>
+          </li>
+          {% empty %}
+          <li>No other members.</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Member CV Card -->
+      <div class="cv-card">
+        <div class="cv-sidebar">
+          {% if member.profile_image %}
+          <img src="{{ member.profile_image.url }}" alt="Profile image" />
+          {% else %}
+          <img src="https://via.placeholder.com/100" alt="Default profile" />
+          {% endif %}
+          <h2>{{ member.get_full_name|default:member.username }}</h2>
+          <p>@{{ member.username }}</p>
+        </div>
+        <div class="cv-main">
+          <div class="section">
+            <h3>Contact Information</h3>
+            <p><span class="label">batch:</span> {{ member.batch }}</p>
+            <p>
+              <span class="label">Phone:</span> {{ member.phone|default:"N/A" }}
+            </p>
+            <p>
+              <span class="label">Address:</span>
+              {{member.address|default:"N/A" }}
+            </p>
+          </div>
+
+          <div class="section">
+            <h3>Professional Details</h3>
+            <p>
+              <span class="label">Role:</span> {{ member.get_role_display }}
+            </p>
+            <p><span class="label">Team:</span> {{ team.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+{%endblock%}

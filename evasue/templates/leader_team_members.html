@@ -1,0 +1,82 @@
+{% extends "base.html" %} {% block title %}Team Members{% endblock %}
+<h1></h1>
+{% block content %}
+<h2>Members of {{ team.name }}</h2>
+
+<input
+  id="search-input"
+  type="text"
+  placeholder="Search members by username, full name, or email"
+  autocomplete="off"
+/>
+
+<table>
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Full Name</th>
+      <th>batch</th>
+    </tr>
+  </thead>
+  <tbody id="members-table-body">
+    {% for membership in members %}
+    <tr>
+      <td data-label="Username">
+        <a href="{% url 'member_detail' membership.user.id %}">
+          {{ membership.user.username }}
+        </a>
+      </td>
+      <td data-label="Full Name">{{ membership.user.full_name }}</td>
+      <td data-label="Email">{{ membership.user.batch }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="3">No active members found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>
+  const input = document.getElementById("search-input");
+  const tableBody = document.getElementById("members-table-body");
+  const teamId = "{{ team.id }}";
+  const baseDetailUrl = "{{ base_detail_url }}"; // e.g., "/leader/member/"
+
+  input.addEventListener("input", function () {
+    const query = input.value.trim();
+
+    fetch(`/team/${teamId}/ajax-members/?q=${encodeURIComponent(query)}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          tableBody.innerHTML = `<tr><td colspan="3">${data.error}</td></tr>`;
+          return;
+        }
+
+        if (data.members.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="3">No members found.</td></tr>`;
+          return;
+        }
+
+        tableBody.innerHTML = data.members
+          .map(
+            (member) => `
+          <tr>
+            <td data-label="Username"><a href="${baseDetailUrl}${member.id}/">${
+              member.username
+            }</a></td>
+            <td data-label="Full Name">${member.full_name || ""}</td>
+            <td data-label="Email">${member.email}</td>
+          </tr>
+        `
+          )
+          .join("");
+      })
+      .catch((err) => {
+        tableBody.innerHTML = `<tr><td colspan="3">Error loading members.</td></tr>`;
+        console.error(err);
+      });
+  });
+</script>
+{% endblock %}

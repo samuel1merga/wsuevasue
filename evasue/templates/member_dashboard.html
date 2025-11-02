@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Member Dashboard{% endblock %}
+{% block content %}
+<style>
+  .team-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .team-card {
+    flex: 1 1 calc(33.333% - 15px);
+    min-height: 150px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    position: relative;
+    text-decoration: none;
+    color: white;
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .team-card:hover {
+    transform: scale(1.02);
+  }
+
+  .team-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .team-overlay h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 800px) {
+    .team-card {
+      flex: 1 1 calc(33.333% - 15px);
+    }
+  }
+
+  @media (max-width: 500px) {
+    .team-card {
+      flex: 1 1 100%;
+    }
+  }
+</style>
+
+<h2>Your Teams</h2>
+<div class="team-list">
+  {% for team in teams %}
+    <a href="{% url 'team_detail' team.id %}"
+       class="team-card"
+       style="background-image: url('{{ team.image.url }}');">
+      <div class="team-overlay">
+        <h2>{{ team.name }}</h2>
+      </div>
+    </a>
+  {% empty %}
+    <p>You are not a member of any team yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'register.css' %}" />
+  </head>
+  <body>
+    <div class="all">
+      <div class="container">
+        {% if messages %} {% for message in messages %}
+        <h4>{{ message }}</h4>
+        {% endfor %} {% endif %}
+        <h2>Member Registration</h2>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <label>Username *</label>
+          <input type="text" name="username" required />
+
+          <label>Password *</label>
+          <input type="password" name="password" required />
+
+          <label>Full Name *</label>
+          <input type="text" name="full_name" required />
+
+          <label>batch *</label>
+          <input type="text" name="batch" required />
+
+          <label>Phone</label>
+          <input type="text" name="phone" />
+
+          <label>Address</label>
+          <textarea name="address"></textarea>
+
+          <label>Profile Image</label>
+          <input type="file" name="profile_image" />
+
+          <button style="background-color:rgba(5, 110, 196, 0.856); border-radius:10px; padding:15px; color:rgb(233, 233, 19)" type="submit">Register</button>
+        </form>
+      </div>
+      <div>
+        <p>
+          Already have an account?
+          <a href="{% url 'login' %}">Login</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,450 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Team Management{% endblock %}</title>
+    <style>
+      /* Your full provided CSS here */
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f9fbfd;
+        color: #2c3e50;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+
+      
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+       height: 60px;
+        background:  #b0b0b1;
+        color: white;
+        padding: 18px 24px;
+        font-size: 22px;
+        font-weight: 600;
+        flex-shrink: 0;
+        z-index: 1000;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 6px rgba(26, 115, 232, 0.4);
+        user-select: none;
+      }
+      .logo{
+        margin: 0;
+        padding:0;
+        height: 50px;
+        width:150px;
+      }
+
+      /* Hamburger Button */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        width: 28px;
+        height: 22px;
+        justify-content: space-between;
+        transition: transform 0.3s ease;
+      }
+      .hamburger div {
+        height: 3px;
+        background: white;
+        border-radius: 2px;
+        transition: background 0.3s ease;
+      }
+
+      /* Container layout */
+      .container {
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+        position: relative;
+        background: #ffffff;
+      }
+
+      /* Sidebar */
+      nav.sidebar {
+        position: fixed;
+        top: 60px; /* same as header height */
+         left: 0;
+         height: calc(100% - 60px); /* subtract header height */
+
+        background:  white;
+        color: rgb(10, 0, 0);
+        width: 300px;
+        padding: 50px 20px ;
+        flex-shrink: 0;
+        transition: transform 0.3s ease;
+        box-shadow: 2px 0 8px rgba(30, 58, 138, 0.3);
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        display: flex;
+          overflow-y: auto;
+
+        flex-direction: column;
+        gap: 14px;
+        user-select: none;
+      }
+
+      nav.sidebar a {
+        color: rgb(8, 8, 8);
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-weight: 800;
+        text-decoration: none;
+        padding: 10px 10px;
+        border-radius: 6px;
+        transition: background 0.3s ease;
+      }
+      nav.sidebar a:hover,
+      nav.sidebar a:focus {
+       padding-bottom: 20px;
+       padding-top: 5px;
+       font-size: larger;
+       font-weight: 1000;
+        box-shadow: 0 10px 10px  #282829;;
+        outline: none;
+
+      }
+
+      /* Main content */
+      main.content {
+        margin-left: 300px;
+        flex: 1;
+        padding: 30px 300px;
+        background: #fff;
+        margin: 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+        min-width: 0;
+        overflow-x: auto;
+      }
+
+      /* Footer */
+      footer {
+        background: #b0b0b1;
+        color: white;
+        text-align: center;
+        padding: 14px 12px;
+        font-size: 14px;
+        font-weight: 600;
+        flex-shrink: 0;
+        user-select: none;
+        z-index: 1000;
+
+      }
+
+      /* Messages */
+      .message {
+        padding: 14px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 500;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+        line-height: 1.4;
+      }
+
+      .message.success {
+        background: #d1e7dd;
+        color: #0f5132;
+        border: 1px solid #badbcc;
+      }
+
+      .message.error {
+        background: #f8d7da;
+        color: #842029;
+        border: 1px solid #f5c2c7;
+      }
+
+      /* Form elements */
+      label {
+        display: block;
+        margin-top: 14px;
+        font-weight: 600;
+        color: #34495e;
+      }
+
+      input[type="text"],
+      input[type="password"],
+      input[type="email"],
+      textarea {
+        width: 100%;
+        padding: 12px 14px;
+        margin-top: 6px;
+        border-radius: 6px;
+        border: 1.5px solid #cbd5e1;
+        font-size: 15px;
+        transition: border-color 0.3s ease;
+        resize: vertical;
+      }
+      input[type="text"]:focus,
+      input[type="password"]:focus,
+      input[type="email"]:focus,
+      textarea:focus {
+        border-color: #1a73e8;
+        outline: none;
+        box-shadow: 0 0 4px #1a73e8aa;
+      }
+
+      /* Buttons */
+      button {
+        margin-top: 20px;
+        padding: 12px 28px;
+        background: #6da4ec;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+      button:hover,
+      button:focus {
+        background: #1669c1;
+        color: rgb(247, 174, 39);
+        outline: none;
+      }
+
+      /* Tables */
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 15px;
+        overflow-x: auto;
+      }
+
+      th,
+      td {
+        border: 1px solid #e1e8f0;
+        padding: 12px 14px;
+        text-align: left;
+        vertical-align: middle;
+      }
+      td a{
+        font-size:large;
+        font-weight: 800;
+        margin: 10px;
+        padding: 5px 10px;
+        text-decoration: none;
+        color: rgb(87, 85, 85);
+        border-top-left-radius: 10px;
+      }
+      td a:hover{
+        text-decoration: underline;
+            }
+      th {
+        background-color: #5b5c5e;
+        color: rgb(245, 175, 45);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 992px) {
+        /* Show hamburger */
+        .hamburger {
+          display: flex;
+        }
+
+        /* Hide sidebar initially */
+        nav.sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          width: 240px;
+          padding-top: 50px; /* space for header */
+          background: #b0b0b1;
+          transform: translateX(-100%);
+          z-index: 1100;
+          box-shadow: 3px 0 12px rgba(30, 58, 138, 0.5);
+          overflow-y: auto;
+          border-top-right-radius: 12px;
+        }
+
+        nav.sidebar.active {
+          transform: translateX(0);
+        }
+
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1050;
+          display: none;
+        }
+
+        .overlay.active {
+          display: block;
+        }
+
+        main.content {
+          margin: 20px 12px;
+          padding: 20px;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          flex-grow: 1;
+        }
+      }
+
+      /* Table Responsive (mobile) */
+      @media (max-width: 250px) {
+        table,
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+          display: block;
+        }
+
+        thead {
+          display: none;
+        }
+
+        tr {
+          margin-bottom: 1.5em;
+          border: 1px solid #e1e8f0;
+          border-radius: 12px;
+          padding: 14px 18px;
+          background: #f9fbfd;
+          box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        td {
+          padding-left: 52%;
+          position: relative;
+          border: none;
+          border-bottom: 1px solid #d1d9e6;
+          text-align: left;
+          font-size: 14px;
+          color: #34495e;
+        }
+
+        td::before {
+          content: attr(data-label);
+          position: absolute;
+          left: 16px;
+          top: 14px;
+          font-weight: 700;
+          color: #1a73e8;
+          white-space: nowrap;
+          text-transform: uppercase;
+          font-size: 13px;
+        }
+
+        td:last-child {
+          border-bottom: 0;
+        }
+      }
+    </style>
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body>
+    <header>
+     <a href="{% url 'home' %}"><img class="logo" src="{% static 'EvaSUELogo.png' %}" alt=""> </a>  
+      <div
+        class="hamburger"
+        id="hamburger"
+        aria-label="Toggle menu"
+        role="button"
+        tabindex="0"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </header>
+
+    <div class="container">
+      <nav class="sidebar" id="sidebar">
+        {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+        <a href="{% url 'custom_password_change' %}">Change Password</a>
+
+        {% if user.role == 'admin' %}
+        <a href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+        <a href="{% url 'create_team' %}">Create Team</a>
+        <a href="{% url 'register_leader' %}">Register Leader</a>
+        <a href="{% url 'manage_leaders' %}">Manage Leaders</a>
+        <a href="{% url 'list_of_leaders' %}">list of leaders</a>
+
+        {% elif user.role == 'leader' %}
+        <a href="{% url 'leader_dashboard' %}">Leader Dashboard</a>
+        {% if user.leading_teams.count == 1 %} {% with team=user.leading_teams.first %}
+        <a href="{% url 'view_team_members' team.id %}">View Members</a>
+        <a href="{% url 'download_team_members_pdf' team.id %}"
+          >Download Members PDF</a
+        >
+        {% endwith %} {% else %}
+        <a href="{% url 'leader_dashboard' %}">View Teams</a> {# or a page to
+        select team #} {% endif %}
+        
+        {% elif user.role == 'member' %}
+        <a href="{% url 'member_dashboard' %}">Member Dashboard</a>
+        <a href="{%url 'home'%}">teams</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Logout</a>
+
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register_member' %}">Register</a>
+        {% endif %}
+      </nav>
+
+      <!-- Overlay -->
+      <div class="overlay" id="overlay"></div>
+
+      <main class="content">{% block content %}{% endblock %}</main>
+    </div>
+
+    <footer>&copy; 2025 EVASUEWSU christian fellowship <br>
+      <a href="https://t.me/wsuGeneral_fellowship" style="display: inline-block; background-color: #b0b0b1; padding: 5px; border-radius: 4px;">
+<img src="{% static 'telegram_logo.svg' %}" alt="Telegram Logo" height="24">
+      </a>
+      
+    </footer>
+
+    <script>
+      const hamburger = document.getElementById("hamburger");
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+
+      hamburger.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+      });
+
+      overlay.addEventListener("click", () => {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("active");
+      });
+
+      // Optional: close sidebar with Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          sidebar.classList.remove("active");
+          overlay.classList.remove("active");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Manage Leaders{% endblock %}
+{% block content %}
+<h2>Manage Leaders</h2>
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-family: Arial, sans-serif;
+  }
+
+  thead {
+    background-color: #003366;
+    color: white;
+  }
+
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+  }
+
+  tr {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+  }
+
+  tr:nth-child(even) {
+    background-color: #eef2f7;
+  }
+
+  tr:hover {
+    background-color: #dbe4f0;
+    transition: 0.2s;
+  }
+
+  a.remove-link {
+    color: #cc0000;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  a.remove-link:hover {
+    text-decoration: underline;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+</style>
+{% for team in teams %}
+<h1>{{ team.name }}</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Leaders</th>
+      <th>remove</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      
+      {% if team.leaders.exists %}
+{% for leader in team.leaders.all %}
+      <td>{{ leader.full_name|default:leader.username }}</td>
+      <td>    
+        <a class="remove-link" href="{% url 'remove_leader' team.id leader.id %}">click</a>,       
+            </td>
+            {% endfor %}
+             </tr>
+            {% else %}
+      <td colspan="2" style="text-align: center;">        
+          No leaders assigned.      
+      </td>
+      {% endif %}
+   
+    
+  </tbody>
+</table>
+{% endfor %}
+{% endblock %}

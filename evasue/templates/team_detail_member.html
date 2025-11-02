@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Team Details{% endblock %} {% block content %}
+<h2>Team: {{ team.name }}</h2>
+<p>{{ team.description }}</p>
+
+<h3>Messages</h3>
+<ul>
+  {% for msg in messages %}
+  <li>
+    <strong>{{ msg.author.username }}</strong> on
+    <em>{{ msg.created_at|date:"Y-m-d H:i" }}</em><br />{{ msg.content }}
+  </li>
+  {% empty %}
+  <li>No messages yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

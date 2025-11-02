@@ -1,0 +1,58 @@
+{% extends "base.html" %} {% block title %}Create Team{% endblock %}
+<h1></h1>
+{% block content %}
+<h1 style="margin-bottom: 24px">Assign Team Leaders</h1>
+
+<form
+  method="post"
+  style="
+    max-width: 500px;
+    background: #fff;
+    padding: 24px 28px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  "
+>
+  {% csrf_token %}
+
+  <label for="team">Select Team</label>
+  <select
+    name="team"
+    id="team"
+    style="
+      margin-top: 6px;
+      margin-bottom: 20px;
+      padding: 12px 14px;
+      width: 100%;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1.5px solid #cbd5e1;
+    "
+  >
+    {% for team in teams %}
+    <option value="{{ team.id }}">{{ team.name }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="leader">Select Leader</label>
+  <select
+    name="leader"
+    id="leader"
+    style="
+      margin-top: 6px;
+      margin-bottom: 24px;
+      padding: 12px 14px;
+      width: 100%;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1.5px solid #cbd5e1;
+    "
+  >
+    {% for leader in leaders %}
+    <option value="{{ leader.id }}">{{ leader.username }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Assign</button>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+<h1></h1>
+{% block title %}Create Team{% endblock %} {% block content %}
+<h2>Create Team</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+  <label>Team Name</label>
+  <input type="text" name="name" required />
+
+  <label>Description</label>
+  <textarea name="description" required></textarea>
+
+  <label>Team Image</label>
+  <input type="file" name="image" accept="image/*" required />
+
+  <button type="submit">Create Team</button>
+</form>
+
+{% endblock %}
