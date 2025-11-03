@@ -61,6 +61,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wsuevasue.wsgi.application'
 
+load_dotenv()  # loads DATABASE_URL from .env or Render environment
+
 # DATABASE (Use PostgreSQL on Render)
 DATABASES = {
     'default': dj_database_url.config(

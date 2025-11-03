@@ -1,3 +1,3 @@
 SECRET_KEY=sami@123
 DEBUG=True
-DATABASE_URL=postgres://sami:sami@123@localhost:5432/evasue_db
+DATABASE_URL=postgresql://sami:AHKhTqQICC2SYFx90Xa0By6z6LOW7fmz@dpg-d43dkhmmcj7s73avp9f0-a/sami_s33i
