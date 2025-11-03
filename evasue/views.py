@@ -76,8 +76,8 @@ def custom_password_change(request):
 
 def custom_login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get('username').lower().strip()
+        password = request.POST.get('password').strip()
         user = authenticate(request, username=username, password=password)
 
         if user and user.is_active:
@@ -239,8 +239,8 @@ def register_leader(request):
 def register_member(request):
     # Member self-registration (no team assigned yet)
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get('username').lower().strip()
+        password = request.POST.get('password').strip()
         full_name = request.POST.get('full_name')
         batch = request.POST.get('batch')
         phone = request.POST.get('phone')
