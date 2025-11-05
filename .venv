@@ -1,6 +1,6 @@
 SECRET_KEY=sami@123
 DEBUG=True
-DATABASE_URL=postgresql://samuel:IHVky4u2vSbPdda4rS6rhkwoTyINUznm@dpg-d44l5jemcj7s73aovn80-a/evasue
+DATABASE_URL=postgresql://samuel:oYwv15yV764XGlLlYyytotHAorJ5yDTE@dpg-d45q3sre5dus73cb92bg-a/evasue_wr46
 
 CLOUDINARY_CLOUD_NAME=diabmp2ch
 CLOUDINARY_API_KEY=822588618995714
