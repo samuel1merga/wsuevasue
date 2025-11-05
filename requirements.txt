@@ -18,3 +18,4 @@ tzdata==2025.2
 
 cloudinary
 django-cloudinary-storage
+whitenoise>=6.7.0
