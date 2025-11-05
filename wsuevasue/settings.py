@@ -1,16 +1,20 @@
 import os
-import dj_database_url
 from pathlib import Path
+import dj_database_url
 from dotenv import load_dotenv
 
-load_dotenv()  # load .env
+# Load environment variables from .env
+load_dotenv()
 
+# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('sami@123', 'fallback-secret')
+# SECURITY
+SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'wsuevasue.onrender.com']
 
+# Applications
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -18,11 +22,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'evasue',
+    'evasue',                  # your app
     'cloudinary',
     'cloudinary_storage',
 ]
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -33,8 +38,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# URL configuration
 ROOT_URLCONF = 'wsuevasue.urls'
 
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -50,8 +57,10 @@ TEMPLATES = [
     },
 ]
 
+# WSGI
 WSGI_APPLICATION = 'wsuevasue.wsgi.application'
 
+# Database (PostgreSQL)
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
@@ -59,6 +68,7 @@ DATABASES = {
     )
 }
 
+# Password validators
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -66,15 +76,18 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Addis_Ababa'
 USE_I18N = True
 USE_TZ = True
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Cloudinary Media Storage
+# Static files (CSS, JS, Images)
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']  # development static files
+STATIC_ROOT = BASE_DIR / 'staticfiles'    # collectstatic destination
+
+# Media files (user uploads) using Cloudinary
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
 
@@ -88,4 +101,5 @@ CLOUDINARY_STORAGE = {
 AUTH_USER_MODEL = 'evasue.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# CSRF trusted origins (for Render HTTPS)
 CSRF_TRUSTED_ORIGINS = ['https://wsuevasue.onrender.com']
