@@ -1,20 +1,27 @@
-import os
+"""
+Django settings for wsuevasue project.
+Ready for deployment on Render with PostgreSQL.
+"""
+
 from pathlib import Path
+import os
 import dj_database_url
 from dotenv import load_dotenv
 
-# Load environment variables from .env
+# Load environment variables from .env (for local development)
 load_dotenv()
 
-# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY
-SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret')
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'wsuevasue.onrender.com']
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('SECRET_KEY', 'sami@123')
 
-# Applications
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+
+ALLOWED_HOSTS = ['your-app-name.onrender.com', '127.0.0.1', 'localhost']
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -22,12 +29,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'evasue',                  # your app
-    'cloudinary',
-    'cloudinary_storage',
+    'evasue',
 ]
 
-# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -38,10 +42,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# URL configuration
 ROOT_URLCONF = 'wsuevasue.urls'
 
-# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -57,10 +59,9 @@ TEMPLATES = [
     },
 ]
 
-# WSGI
 WSGI_APPLICATION = 'wsuevasue.wsgi.application'
 
-# Database (PostgreSQL)
+# DATABASE (Use PostgreSQL on Render)
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
@@ -68,7 +69,7 @@ DATABASES = {
     )
 }
 
-# Password validators
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -82,24 +83,15 @@ TIME_ZONE = 'Africa/Addis_Ababa'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JS, Images)
+# Static & Media files
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']  # development static files
-STATIC_ROOT = BASE_DIR / 'staticfiles'    # collectstatic destination
-
-# Media files (user uploads) using Cloudinary
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+STATICFILES_DIRS = [BASE_DIR / 'static']  # dev
+STATIC_ROOT = BASE_DIR / 'staticfiles'    # Render production
 MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'diabmp2ch'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY', '822588618995714'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', 'tNi0vwgDa17yPw1NQNDWz6dmaFc'),
-}
-
-# Custom user model
-AUTH_USER_MODEL = 'evasue.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'evasue.User'
 
-# CSRF trusted origins (for Render HTTPS)
-CSRF_TRUSTED_ORIGINS = ['https://wsuevasue.onrender.com']
+# Security for Render
+CSRF_TRUSTED_ORIGINS = ['https://your-app-name.onrender.com']
