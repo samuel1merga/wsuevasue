@@ -62,21 +62,25 @@
   </thead>
   <tbody>
     
-    <tr>
       
-      {% if team.leaders.exists %}
-{% for leader in team.leaders.all %}
-      <td>{{ leader.full_name|default:leader.username }}</td>
-      <td>    
-        <a class="remove-link" href="{% url 'remove_leader' team.id leader.id %}">click</a>,       
-            </td>
-            {% endfor %}
-             </tr>
-            {% else %}
-      <td colspan="2" style="text-align: center;">        
+  {% if team.leaders.exists %}
+    {% for leader in team.leaders.all %}
+     <tr>
+        <td>{{ leader.full_name|default:leader.username }}</td>
+        <td>    
+          <a class="remove-link" href="{% url 'remove_leader' team.id leader.id %}">click</a>,       
+        </td>
+     </tr>
+    {% endfor %}
+             
+  {% else %}
+    <tr>
+        <td colspan="2" style="text-align: center;">        
           No leaders assigned.      
       </td>
-      {% endif %}
+    </tr>
+      
+  {% endif %}
    
     
   </tbody>
