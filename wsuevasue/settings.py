@@ -94,4 +94,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'evasue.User'
 
 # Security for Render
-CSRF_TRUSTED_ORIGINS = ['https://your-app-name.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://wsuevasue.onrender.com']
