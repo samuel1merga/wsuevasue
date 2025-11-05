@@ -7,7 +7,7 @@ load_dotenv()  # load .env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret')
+SECRET_KEY = os.getenv('sami@123', 'fallback-secret')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'wsuevasue.onrender.com']
 
@@ -70,20 +70,22 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Addis_Ababa'
 USE_I18N = True
 USE_TZ = True
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Cloudinary Media Storage
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'diabmp2ch'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY', '822588618995714'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', 'tNi0vwgDa17yPw1NQNDWz6dmaFc'),
 }
 
+# Custom user model
 AUTH_USER_MODEL = 'evasue.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 CSRF_TRUSTED_ORIGINS = ['https://wsuevasue.onrender.com']
