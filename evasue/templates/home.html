@@ -129,14 +129,9 @@
          class="team-box" 
          style="background-image: url('{{ item.team.image.url }}');">
     {% else %}
-      <a href="{% url 'team_detail' item.team.id %}" 
-   class="team-box"
-   {% if item.team.image %}
-       style="background-image: url('{{ item.team.image.url }}');"
-   {% else %}
-       style="background-image: url('{% static "photo/team.jpg" %}');"
-   {% endif %}>
-
+      <a href="{% url 'login' %}?next={% url 'team_detail' item.team.id %}" 
+         class="team-box" 
+         style="background-image: url('{{ item.team.image.url }}');">
     {% endif %}
 
       <div class="team-overlay">
